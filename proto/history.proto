@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package history;
+
+option go_package = "github.com/Portfolio-Advanced-software/BingeBuster-WatchHistoryService/historypb";
+
+
+
+service HistoryService {
+    rpc CreateHistory(CreateHistoryReq) returns (CreateHistoryRes);
+    rpc ReadHistory(ReadHistoryReq) returns (ReadHistoryRes);
+    rpc UpdateHistory(UpdateHistoryReq) returns (UpdateHistoryRes);
+    rpc DeleteHistory(DeleteHistoryReq) returns (DeleteHistoryRes);
+    rpc ListHistorys(ListHistoriesReq) returns (stream ListHistoriesRes);
+}
+
+
+message History {
+    int64 userid = 1;
+    int64 movieid = 2;
+    string progress = 3;
+    bool like = 4;
+}
+
+
+message CreateHistoryReq {
+    History history = 1; // History id blank
+}
+message CreateHistoryRes {
+    History history = 1; // History id filled in
+}
+
+message UpdateHistoryReq {
+    History history = 1;
+}
+message UpdateHistoryRes {
+    History history = 1;
+}
+
+message ReadHistoryReq {
+    string id = 1;
+}
+message ReadHistoryRes {
+    History history = 1;
+}
+
+message DeleteHistoryReq {
+    string id = 1;
+}
+message DeleteHistoryRes {
+    bool success = 1;
+}
+
+message ListHistoriesReq {}
+
+message ListHistoriesRes {
+    History history = 1;
+}
