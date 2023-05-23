@@ -185,7 +185,7 @@ func (s *HistoryServiceServer) DeleteHistory(ctx context.Context, req *historypb
 }
 
 const (
-	port = ":50055"
+	port = ":50056"
 )
 
 var db *mongo.Client
@@ -203,7 +203,7 @@ func main() {
 	// Configure 'log' package to give file name and line number on eg. log.Fatal
 	// Pipe flags to one another (log.LstdFLags = log.Ldate | log.Ltime)
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	fmt.Println("Starting server on port :50055...")
+	fmt.Println("Starting server on port :50056...")
 
 	// Set listener to start server
 	lis, err := net.Listen("tcp", port)
@@ -233,7 +233,7 @@ func main() {
 			log.Fatalf("Failed to serve: %v", err)
 		}
 	}()
-	fmt.Println("Server succesfully started on port :50055")
+	fmt.Println("Server succesfully started on port :50056")
 
 	// Right way to stop the server using a SHUTDOWN HOOK
 	// Create a channel to receive OS signals
