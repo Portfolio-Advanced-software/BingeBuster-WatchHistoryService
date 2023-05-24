@@ -11,7 +11,7 @@ service HistoryService {
     rpc ReadHistory(ReadHistoryReq) returns (ReadHistoryRes);
     rpc UpdateHistory(UpdateHistoryReq) returns (UpdateHistoryRes);
     rpc DeleteHistory(DeleteHistoryReq) returns (DeleteHistoryRes);
-    rpc ListHistorys(ListHistoriesReq) returns (stream ListHistoriesRes);
+    rpc ListHistories(ListHistoriesReq) returns (stream ListHistoriesRes);
 }
 
 

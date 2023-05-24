@@ -8,9 +8,9 @@ import (
 	"os"
 	"os/signal"
 
-	models "github.com/Portfolio-Advanced-software/BingeBuster-HistoryService/models"
-	mongodb "github.com/Portfolio-Advanced-software/BingeBuster-HistoryService/mongodb"
-	historypb "github.com/Portfolio-Advanced-software/BingeBuster-HistoryService/proto"
+	models "github.com/Portfolio-Advanced-software/BingeBuster-WatchHistoryService/models"
+	mongodb "github.com/Portfolio-Advanced-software/BingeBuster-WatchHistoryService/mongodb"
+	historypb "github.com/Portfolio-Advanced-software/BingeBuster-WatchHistoryService/proto"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -33,10 +33,10 @@ func (s *HistoryServiceServer) CreateHistory(ctx context.Context, req *historypb
 	// Now we have to convert this into a History type to convert into BSON
 	data := models.History{
 		// ID:    Empty, so it gets omitted and MongoDB generates a unique Object ID upon insertion.
-		UserId:    history.GetUserId(),
-		HistoryId: history.GetHistoryId(),
-		Progress:  history.GetProgress(),
-		Like:      history.GetLike(),
+		UserId:   history.GetUserid(),
+		MovieId:  history.GetMovieid(),
+		Progress: history.GetProgress(),
+		Like:     history.GetLike(),
 	}
 
 	// Insert the data into the database, result contains the newly generated Object ID for the new document
@@ -73,11 +73,11 @@ func (s *HistoryServiceServer) ReadHistory(ctx context.Context, req *historypb.R
 	// Cast to ReadHistoryRes type
 	response := &historypb.ReadHistoryRes{
 		History: &historypb.History{
-			Id:        oid.Hex(),
-			UserId:    data.UserId,
-			HistoryId: data.HistoryId,
-			Progress:  data.Progress,
-			Like:      data.Like,
+			Id:       oid.Hex(),
+			Userid:   data.UserId,
+			Movieid:  data.MovieId,
+			Progress: data.Progress,
+			Like:     data.Like,
 		},
 	}
 	return response, nil
@@ -104,11 +104,11 @@ func (s *HistoryServiceServer) ListHistories(req *historypb.ListHistoriesReq, st
 		// If no error is found send blog over stream
 		stream.Send(&historypb.ListHistoriesRes{
 			History: &historypb.History{
-				Id:        data.ID.Hex(),
-				UserId:    data.UserId,
-				HistoryId: data.HistoryId,
-				Progress:  data.Progress,
-				Like:      data.Like,
+				Id:       data.ID.Hex(),
+				Userid:   data.UserId,
+				Movieid:  data.MovieId,
+				Progress: data.Progress,
+				Like:     data.Like,
 			},
 		})
 	}
@@ -134,10 +134,10 @@ func (s *HistoryServiceServer) UpdateHistory(ctx context.Context, req *historypb
 
 	// Convert the data to be updated into an unordered Bson document
 	update := bson.M{
-		"userid":    history.GetUserId(),
-		"historyid": history.GetHistoryId(),
-		"progress":  history.GetProgress(),
-		"like":      history.GetLike(),
+		"userid":   history.GetUserid(),
+		"movieid":  history.GetMovieid(),
+		"progress": history.GetProgress(),
+		"like":     history.GetLike(),
 	}
 
 	// Convert the oid into an unordered bson document to search by id
@@ -158,11 +158,11 @@ func (s *HistoryServiceServer) UpdateHistory(ctx context.Context, req *historypb
 	}
 	return &historypb.UpdateHistoryRes{
 		History: &historypb.History{
-			Id:        decoded.ID.Hex(),
-			Userid:    decoded.UserId,
-			Historyid: decoded.HistoryId,
-			Progress:  decoded.Progress,
-			Like:      decoded.Like,
+			Id:       decoded.ID.Hex(),
+			Userid:   decoded.UserId,
+			Movieid:  decoded.MovieId,
+			Progress: decoded.Progress,
+			Like:     decoded.Like,
 		},
 	}, nil
 }
@@ -199,7 +199,7 @@ var mongoUsername = "user-service"
 var mongoPwd = "vLxxhmS0eJFwmteF"
 var connUri = "mongodb+srv://" + mongoUsername + ":" + mongoPwd + "@cluster0.fpedw5d.mongodb.net/"
 
-var dbName = "HistoryService"
+var dbName = "WatchHistoryService"
 var collectionName = "Histories"
 
 func main() {
