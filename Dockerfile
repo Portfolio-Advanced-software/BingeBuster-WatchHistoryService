@@ -13,8 +13,8 @@ RUN go get -d -v ./...
 # Build the Go app
 RUN go build -o app
 
-# Expose port 50055 for the application
-EXPOSE 50055
+# Expose port 50056 for the application
+EXPOSE 50056
 
 # Define the command to run the executable
 CMD ["./app"]
