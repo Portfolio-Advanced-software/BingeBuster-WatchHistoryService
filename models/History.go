@@ -6,8 +6,8 @@ import (
 
 type History struct {
 	ID       primitive.ObjectID `bson:"_id,omitempty"`
-	UserId   int64              `bson:"userid,omitempty"`
-	MovieId  int64              `bson:"movieid,omitempty"`
+	UserId   string             `bson:"userid,omitempty"`
+	MovieId  string             `bson:"movieid,omitempty"`
 	Progress string             `bson:"progress,omitempty"`
 	Like     bool               `bson:"like,omitempty"`
 }

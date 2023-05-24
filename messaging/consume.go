@@ -6,7 +6,7 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-func ConsumeMessage(queue string) {
+func ConsumeMessage(queueName string, callback func([]byte)) {
 	conn, err := amqp.Dial("amqps://tnhdeowx:tInXH7wKtKdyn-v97fZ_HGM5XmHsDTNl@rattlesnake.rmq.cloudamqp.com/tnhdeowx")
 	FailOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
@@ -16,12 +16,12 @@ func ConsumeMessage(queue string) {
 	defer ch.Close()
 
 	q, err := ch.QueueDeclare(
-		queue, // name
-		false, // durable
-		false, // delete when unused
-		false, // exclusive
-		false, // no-wait
-		nil,   // arguments
+		queueName, // name
+		false,     // durable
+		false,     // delete when unused
+		false,     // exclusive
+		false,     // no-wait
+		nil,       // arguments
 	)
 	FailOnError(err, "Failed to declare a queue")
 
@@ -41,6 +41,7 @@ func ConsumeMessage(queue string) {
 	go func() {
 		for d := range msgs {
 			log.Printf("Received a message: %s", d.Body)
+			callback(d.Body)
 		}
 	}()
 
