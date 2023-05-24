@@ -23,7 +23,7 @@ const (
 	HistoryService_ReadHistory_FullMethodName   = "/history.HistoryService/ReadHistory"
 	HistoryService_UpdateHistory_FullMethodName = "/history.HistoryService/UpdateHistory"
 	HistoryService_DeleteHistory_FullMethodName = "/history.HistoryService/DeleteHistory"
-	HistoryService_ListHistorys_FullMethodName  = "/history.HistoryService/ListHistorys"
+	HistoryService_ListHistories_FullMethodName = "/history.HistoryService/ListHistories"
 )
 
 // HistoryServiceClient is the client API for HistoryService service.
@@ -34,7 +34,7 @@ type HistoryServiceClient interface {
 	ReadHistory(ctx context.Context, in *ReadHistoryReq, opts ...grpc.CallOption) (*ReadHistoryRes, error)
 	UpdateHistory(ctx context.Context, in *UpdateHistoryReq, opts ...grpc.CallOption) (*UpdateHistoryRes, error)
 	DeleteHistory(ctx context.Context, in *DeleteHistoryReq, opts ...grpc.CallOption) (*DeleteHistoryRes, error)
-	ListHistorys(ctx context.Context, in *ListHistoriesReq, opts ...grpc.CallOption) (HistoryService_ListHistorysClient, error)
+	ListHistories(ctx context.Context, in *ListHistoriesReq, opts ...grpc.CallOption) (HistoryService_ListHistoriesClient, error)
 }
 
 type historyServiceClient struct {
@@ -81,12 +81,12 @@ func (c *historyServiceClient) DeleteHistory(ctx context.Context, in *DeleteHist
 	return out, nil
 }
 
-func (c *historyServiceClient) ListHistorys(ctx context.Context, in *ListHistoriesReq, opts ...grpc.CallOption) (HistoryService_ListHistorysClient, error) {
-	stream, err := c.cc.NewStream(ctx, &HistoryService_ServiceDesc.Streams[0], HistoryService_ListHistorys_FullMethodName, opts...)
+func (c *historyServiceClient) ListHistories(ctx context.Context, in *ListHistoriesReq, opts ...grpc.CallOption) (HistoryService_ListHistoriesClient, error) {
+	stream, err := c.cc.NewStream(ctx, &HistoryService_ServiceDesc.Streams[0], HistoryService_ListHistories_FullMethodName, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &historyServiceListHistorysClient{stream}
+	x := &historyServiceListHistoriesClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -96,16 +96,16 @@ func (c *historyServiceClient) ListHistorys(ctx context.Context, in *ListHistori
 	return x, nil
 }
 
-type HistoryService_ListHistorysClient interface {
+type HistoryService_ListHistoriesClient interface {
 	Recv() (*ListHistoriesRes, error)
 	grpc.ClientStream
 }
 
-type historyServiceListHistorysClient struct {
+type historyServiceListHistoriesClient struct {
 	grpc.ClientStream
 }
 
-func (x *historyServiceListHistorysClient) Recv() (*ListHistoriesRes, error) {
+func (x *historyServiceListHistoriesClient) Recv() (*ListHistoriesRes, error) {
 	m := new(ListHistoriesRes)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -121,7 +121,7 @@ type HistoryServiceServer interface {
 	ReadHistory(context.Context, *ReadHistoryReq) (*ReadHistoryRes, error)
 	UpdateHistory(context.Context, *UpdateHistoryReq) (*UpdateHistoryRes, error)
 	DeleteHistory(context.Context, *DeleteHistoryReq) (*DeleteHistoryRes, error)
-	ListHistorys(*ListHistoriesReq, HistoryService_ListHistorysServer) error
+	ListHistories(*ListHistoriesReq, HistoryService_ListHistoriesServer) error
 	mustEmbedUnimplementedHistoryServiceServer()
 }
 
@@ -141,8 +141,8 @@ func (UnimplementedHistoryServiceServer) UpdateHistory(context.Context, *UpdateH
 func (UnimplementedHistoryServiceServer) DeleteHistory(context.Context, *DeleteHistoryReq) (*DeleteHistoryRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteHistory not implemented")
 }
-func (UnimplementedHistoryServiceServer) ListHistorys(*ListHistoriesReq, HistoryService_ListHistorysServer) error {
-	return status.Errorf(codes.Unimplemented, "method ListHistorys not implemented")
+func (UnimplementedHistoryServiceServer) ListHistories(*ListHistoriesReq, HistoryService_ListHistoriesServer) error {
+	return status.Errorf(codes.Unimplemented, "method ListHistories not implemented")
 }
 func (UnimplementedHistoryServiceServer) mustEmbedUnimplementedHistoryServiceServer() {}
 
@@ -229,24 +229,24 @@ func _HistoryService_DeleteHistory_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _HistoryService_ListHistorys_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _HistoryService_ListHistories_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(ListHistoriesReq)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(HistoryServiceServer).ListHistorys(m, &historyServiceListHistorysServer{stream})
+	return srv.(HistoryServiceServer).ListHistories(m, &historyServiceListHistoriesServer{stream})
 }
 
-type HistoryService_ListHistorysServer interface {
+type HistoryService_ListHistoriesServer interface {
 	Send(*ListHistoriesRes) error
 	grpc.ServerStream
 }
 
-type historyServiceListHistorysServer struct {
+type historyServiceListHistoriesServer struct {
 	grpc.ServerStream
 }
 
-func (x *historyServiceListHistorysServer) Send(m *ListHistoriesRes) error {
+func (x *historyServiceListHistoriesServer) Send(m *ListHistoriesRes) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -276,8 +276,8 @@ var HistoryService_ServiceDesc = grpc.ServiceDesc{
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "ListHistorys",
-			Handler:       _HistoryService_ListHistorys_Handler,
+			StreamName:    "ListHistories",
+			Handler:       _HistoryService_ListHistories_Handler,
 			ServerStreams: true,
 		},
 	},
