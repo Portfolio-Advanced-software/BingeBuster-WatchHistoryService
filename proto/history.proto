@@ -16,10 +16,11 @@ service HistoryService {
 
 
 message History {
-    int64 userid = 1;
-    int64 movieid = 2;
-    string progress = 3;
-    bool like = 4;
+    string id = 1;
+    int64 userid = 2;
+    int64 movieid = 3;
+    string progress = 4;
+    bool like = 5;
 }
 
 

@@ -1,4 +1,4 @@
-module github.com/Portfolio-Advanced-software/BingeBuster-MovieService
+module github.com/Portfolio-Advanced-software/BingeBuster-WatchHistoryService
 
 go 1.20
 
