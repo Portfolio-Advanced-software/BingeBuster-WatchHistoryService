@@ -4,6 +4,15 @@ on:
   push:
     branches: [ "main" ]
 
+
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GKE_CLUSTER: bingebuster-cluster 
+  GKE_ZONE: europe-west4-a
+  
+
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -39,3 +48,30 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/bingebuster-watchhistoryservice:latest
+          
+          
+      - name: Install repository key
+        run: |
+          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+
+      - name: Update package list
+        run: sudo apt-get update
+          
+      - name: Set up gcloud
+        uses: google-github-actions/auth@v0.6.0
+        with:
+          credentials_json: ${{ secrets.GKE_SA_KEY }}
+          project_id: ${{ secrets.GKE_PROJECT }}
+
+      - name: Install gke-gcloud-auth-plugin
+        run: |
+          sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
+          
+      - name: Configure kubectl
+        run: |
+          gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --zone ${{ env.GKE_ZONE }}
+
+      - name: Update image in Kubernetes Cluster
+        run: |
+          kubectl set image deployment/bingebuster movie-service=milofow/bingebuster-movieservice:latest
