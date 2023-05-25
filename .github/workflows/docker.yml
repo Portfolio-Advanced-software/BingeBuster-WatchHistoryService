@@ -74,4 +74,4 @@ jobs:
 
       - name: Update image in Kubernetes Cluster
         run: |
-          kubectl set image deployment/bingebuster movie-service=milofow/bingebuster-movieservice:latest
+          kubectl set image deployment/bingebuster watchhistory-service=milofow/bingebuster-watchhistoryservice:latest
