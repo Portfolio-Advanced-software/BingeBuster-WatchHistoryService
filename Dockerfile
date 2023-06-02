@@ -13,6 +13,10 @@ RUN go get -d -v ./...
 # Build the Go app
 RUN go build -o app
 
+# Create a non-root user and switch to that user
+RUN adduser -D watchhistory-service
+USER watchhistory-service
+
 # Expose port 50056 for the application
 EXPOSE 50056
 
