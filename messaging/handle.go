@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/Portfolio-Advanced-software/BingeBuster-WatchHistoryService/globals"
 	"github.com/Portfolio-Advanced-software/BingeBuster-WatchHistoryService/mongodb"
 )
 
@@ -25,6 +26,11 @@ func HandleMessage(body []byte) {
 	}
 
 	switch msg.Action {
+	case "getAllRecords":
+		err := mongodb.GetAllUserData(context.Background(), msg.UserId, SendMessage)
+		if err != nil {
+			log.Println("Failed to get all records:", err)
+		}
 	case "deleteAllRecords":
 		_, err := mongodb.DeleteHistoryByUserId(context.Background(), msg.UserId)
 		if err != nil {
@@ -33,4 +39,14 @@ func HandleMessage(body []byte) {
 	default:
 		fmt.Println("Unknown action:", msg.Action)
 	}
+}
+
+func SendMessage(data string) error {
+	conn, err := ConnectToRabbitMQ(globals.RabbitMQUrl)
+	if err != nil {
+		log.Fatalf("Can't connect to RabbitMQ: %s", err)
+	}
+	ProduceMessage(conn, data, "user_data")
+
+	return nil
 }
