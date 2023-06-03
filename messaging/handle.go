@@ -10,7 +10,7 @@ import (
 )
 
 type Message struct {
-	UserId  string `json:"userid"`
+	UserId  string `json:"user_id"`
 	MovieId string `json:"movieid"`
 	Action  string `json:"action"`
 }
